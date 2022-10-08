@@ -60,27 +60,27 @@ async def bin(_, m: Message):
             inputm = m.text.split(None, 1)[1]
             bincode = 6
             ask = inputm[:bincode]
-            req = requests.get(f"https://bins-su-api.vercel.app/api/{ask}").json()
+            req = requests.get(f"https://lookup.binlist.net/{ask}").json()
             res = req["result"]
 
             if res == False:
                 return await mafia.edit("❌ #INVALID_BIN ❌\n\nPlease provide a valid bin.")
-            da = req["data"]
-            bi = da["bin"]
-            ve = da["vendor"]
-            ty = da["type"]
-            le = da["level"]
-            ban = da["bank"]
-            co = da["country"]
-            cc = da["countryInfo"]
-            nm = cc["name"]
-            em = cc["emoji"]
-            cod = cc["code"]
-            dial = cc["dialCode"]
+            data = req["data"]
+            vendor = data["scheme"]
+            type = data["type"]
+            prepaid = data["prepaid"]
+            bankinfo = data["bank"]
+            phone = bankinfo["phone"]
+            bank = bankinfo["name"]
+            countryinfo = data["country"]
+            country = countryinfo["name"]
+            emoji = countryinfo["emoji"]
+            code = countryinfo["alpha2"]
+            currency = countryinfo["currency"]
 
             mfrom = m.from_user.mention
             caption = f"""
-    ╔ Valid :- `{res} ✅`\n╚ Bin :- `{bi}`\n\n╔ Brand :- `{ve}`\n╠ Type :- `{ty}`\n╚ Level :- `{le}`\n\n╔ Bank :- `{ban} ({co})`\n╠ Country :- `{nm} {em}`\n╠ Alpha2 :- `{cod}`\n╚ DialCode :- `{dial}`\n\n**↠ Checked By :-** {mfrom}\n**↠ __Bot By :-** [Denuwan](https://github.com/ImDenuwan/Bin-Checker-Bot)__
+    ->Valid - {res}\nBin - {ask}\n-> Vendor - {vendor} \n-> Type - {type} \n-> Prepaid - {prepaid} \n-> Bank - {bank} \n-> Bank Phone - {phone} \n-> Country - {country}/{code} {emoji} \n-> Currency - {currency}_
     """
             await mafia.edit(caption, disable_web_page_preview=True)
             
